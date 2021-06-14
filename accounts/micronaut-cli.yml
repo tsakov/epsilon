@@ -1,0 +1,6 @@
+applicationType: messaging
+defaultPackage: com.epsilon.accounts
+testFramework: junit
+sourceLanguage: kotlin
+buildTool: gradle_kotlin
+features: [annotation-api, app-name, gradle, junit, kafka, kotlin, kotlin-application, logback, readme, shade, yaml]
