@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+    consul:
+      host: localhost
+      port: 8500
+server:
+  port: 8000

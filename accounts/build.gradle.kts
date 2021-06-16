@@ -9,12 +9,13 @@ plugins {
 version = "0.1"
 group = "com.epsilon.accounts"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
 }
 
 micronaut {
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
@@ -23,7 +24,9 @@ micronaut {
 }
 
 dependencies {
+    implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.discovery:micronaut-discovery-client")
     implementation("io.micronaut.kafka:micronaut-kafka")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("javax.annotation:javax.annotation-api")
@@ -33,9 +36,6 @@ dependencies {
     implementation("io.micronaut:micronaut-validation")
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-
-    testImplementation("io.micronaut:micronaut-http-client")
-
 }
 
 
@@ -57,6 +57,4 @@ tasks {
             jvmTarget = "11"
         }
     }
-
-
 }
