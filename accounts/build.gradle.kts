@@ -4,6 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0"
     id("io.micronaut.application") version "1.5.0"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
+    id("com.github.davidmc24.gradle.plugin.avro") version "1.2.0"
 }
 
 version = "0.1"
@@ -12,6 +13,7 @@ group = "com.epsilon.accounts"
 val kotlinVersion = project.properties["kotlinVersion"]
 repositories {
     mavenCentral()
+    maven("https://packages.confluent.io/maven/")
 }
 
 micronaut {
@@ -28,6 +30,9 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.discovery:micronaut-discovery-client")
     implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("io.projectreactor.kafka:reactor-kafka:1.3.4")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.3")
+    implementation("io.confluent:kafka-avro-serializer:6.0.0")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("javax.annotation:javax.annotation-api")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
@@ -35,9 +40,10 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
 
+    implementation("com.github.javafaker:javafaker:1.0.2")
+
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
-
 
 application {
     mainClass.set("com.epsilon.accounts.ApplicationKt")
@@ -57,4 +63,11 @@ tasks {
             jvmTarget = "11"
         }
     }
+}
+
+avro {
+    isCreateSetters.set(false)
+    isGettersReturnOptional.set(true)
+    isOptionalGettersForNullableFieldsOnly.set(true)
+    fieldVisibility.set("PRIVATE")
 }
