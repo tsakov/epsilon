@@ -1,7 +1,7 @@
 {
     "type": "record",
     "name": "Account",
-    "namespace": "com.epsilon.accounts",
+    "namespace": "com.epsilon.accounts.avro",
     "fields": [
         {
             "name": "id",

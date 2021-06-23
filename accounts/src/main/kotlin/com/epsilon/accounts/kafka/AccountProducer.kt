@@ -1,21 +1,19 @@
 package com.epsilon.accounts.kafka
 
-import com.github.javafaker.Faker
-import io.micronaut.scheduling.annotation.Scheduled
+import com.epsilon.accounts.dto.Account
+import kotlinx.coroutines.reactive.awaitSingle
 import org.apache.kafka.clients.producer.ProducerRecord
-import reactor.core.publisher.Mono
 import reactor.kafka.sender.KafkaSender
 import reactor.kafka.sender.SenderOptions
 import reactor.kafka.sender.SenderRecord
-import java.util.*
+import reactor.kafka.sender.SenderResult
+import reactor.kotlin.core.publisher.toMono
 import javax.inject.Singleton
 
 @Singleton
 class AccountProducer {
 
-    private val faker = Faker()
-
-    private val sender = KafkaSender.create<String, com.epsilon.accounts.Account>(
+    private val sender = KafkaSender.create<String, com.epsilon.accounts.avro.Account>(
         SenderOptions.create(
             mapOf(
                 "bootstrap.servers" to "localhost:29092",
@@ -27,20 +25,13 @@ class AccountProducer {
         )
     )
 
-    @Scheduled(fixedDelay = "2s")
-    fun sendAccount() {
-        val account = com.epsilon.accounts.Account(
-            UUID.randomUUID().toString(),
-            faker.name().fullName()
-        )
+    private val topic = "accounts"
 
-        ProducerRecord("accounts", account.id.toString(), account)
+    suspend fun send(account: Account): SenderResult<String> {
+        return account.toAvro()
+            .let { ProducerRecord(topic, it.id, it) }
             .let { SenderRecord.create(it, it.key()) }
-            .let { sender.send(Mono.just(it)) }
-            .map {
-                println("Sent $account")
-                it
-            }
-            .subscribe()
+            .let { sender.send(it.toMono()) }
+            .awaitSingle()
     }
 }
