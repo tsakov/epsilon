@@ -1,0 +1,19 @@
+micronaut:
+  application:
+    name: orders
+  server:
+    port: 8082
+kafka:
+  bootstrap:
+    servers: localhost:29092
+  consumers:
+    default:
+      specific.avro.reader: true
+      key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      schema.registry.url: http://localhost:8081
+consul:
+  client:
+    defaultZone: ${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}
+    registration:
+      enabled: true

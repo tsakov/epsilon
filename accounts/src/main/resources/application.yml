@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: accounts
+  server:
+    port: 8080
 consul:
   client:
     registration:
