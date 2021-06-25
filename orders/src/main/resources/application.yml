@@ -2,7 +2,7 @@ micronaut:
   application:
     name: orders
   server:
-    port: 8082
+    port: 8002
 kafka:
   bootstrap:
     servers: localhost:29092
