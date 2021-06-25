@@ -3,14 +3,13 @@ package com.epsilon.orders.kafka
 import com.epsilon.accounts.avro.Account
 import io.micronaut.configuration.kafka.annotation.KafkaListener
 import io.micronaut.configuration.kafka.annotation.OffsetReset.EARLIEST
-import io.micronaut.configuration.kafka.annotation.OffsetStrategy
 import io.micronaut.configuration.kafka.annotation.Topic
 import io.micronaut.core.annotation.Blocking
 import io.reactivex.Single
 import org.apache.logging.log4j.kotlin.logger
 
 
-@KafkaListener(groupId = "epsilon-orders", offsetReset = EARLIEST, offsetStrategy = OffsetStrategy.ASYNC)
+@KafkaListener(groupId = "epsilon-orders", offsetReset = EARLIEST)
 class AccountConsumer {
 
     private val log = logger()
@@ -18,9 +17,8 @@ class AccountConsumer {
     // TODO: auto commit
     @Blocking
     @Topic("accounts")
-    fun receive(flowable: Single<Account>): Single<Account> {
-        return flowable.doOnSuccess {
+    fun receive(flowable: Single<Account>): Single<Account> = flowable
+        .doOnSuccess {
             log.info("Received account: $it")
         }
-    }
 }
