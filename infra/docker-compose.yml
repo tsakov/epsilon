@@ -25,6 +25,14 @@ services:
       - consul
     command: "agent"
 
+  epsilon-prometheus:
+    image: prom/prometheus:v2.28.1
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+
   epsilon-zookeeper:
     image: confluentinc/cp-zookeeper:6.0.0
     container_name: epsilon-zookeeper

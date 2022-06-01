@@ -3,6 +3,16 @@ micronaut:
     name: orders
   server:
     port: 8002
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true
+endpoints:
+  prometheus:
+    sensitive: false
 kafka:
   bootstrap:
     servers: localhost:29092
